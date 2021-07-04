@@ -19,17 +19,20 @@ function App() {
     {
         id:1,
         username: 'yang',
-        email: 'yang@naver.com'
+        email: 'yang@naver.com',
+        active: true
     },
     {
         id:2,
         username: 'da',
-        email: 'da@naver.com'
+        email: 'da@naver.com',
+        active: false
     },
     {
         id:1,
         username: 'hyun',
-        email: 'hyun@naver.com'
+        email: 'hyun@naver.com',
+        active: false
     }
 ]);
   const nextId = useRef(4);
@@ -53,11 +56,18 @@ function App() {
   const onRemove = id => {
     setUsers(users.filter(user => user.id !== id));
   }
+  const onToggle = id => {
+    setUsers(users.map(
+      user => user.id === id
+      ? { ...user, active: !user.active }
+      : user
+    ));
+  }
 
   return (
     <>
     <CreateUser username={username} email={email} onChange={onChange} onCreate={onCreate} />
-    <UsersList users={users} onRemove={onRemove} />
+    <UsersList users={users} onRemove={onRemove} onToggle={onToggle} />
     </>
   );
 }
