@@ -1,6 +1,30 @@
-import React from 'react';
+import React, { useRef, useContext } from 'react';
+import produce from 'immer';
+import useInputs from './useInputs';
+import { UserDispatch } from './App'
 
-function CreateUser({ username, email, onChange, onCreate }) {
+const CreateUser = () => {
+    const [{ username, email }, onChange, reset] = useInputs({
+        username: '',
+        email: ''
+    });
+
+    const nextId = useRef(4);
+    const dispatch = useContext(UserDispatch);
+
+    const onCreate = () => {
+        dispatch({
+            type: 'CREATE_USER',
+            user: {
+                id: nextId.current,
+                username,
+                email
+            }
+        });
+        reset();
+        nextId.current += 1;
+    };
+
     return (
         <div>
             <input name="username" placeholder="계정명" onChange={onChange} value={username} />
@@ -9,6 +33,7 @@ function CreateUser({ username, email, onChange, onCreate }) {
         </div>
     );
 }
+
 
 export default React.memo(CreateUser);
 // props가 바뀌었을 때만 리렌더링을 해줌
